@@ -1,0 +1,68 @@
+# --- Python & Virtual Environment ---
+venv/
+env/
+ENV/
+bin/
+lib/
+include/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Django Specific ---
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+backend_django/media/
+backend_django/static/collected/
+
+# --- AI & Multimodal Assets (Security & Size) ---
+# Ignore heavy model weights and sensitive datasets
+data/
+ai_service_fastapi/models/*.pth
+ai_service_fastapi/models/*.h5
+ai_service_fastapi/models/*.onnx
+ai_service_fastapi/models/*.bin
+
+# --- Environment & Secrets ---
+.env
+.flaskenv
+.secret
+.ssh/
+
+# --- OS & IDE Specific ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Testing & Coverage ---
+htmlcov/
+.tox/
+.nositests
+.pytest_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.coverage
+.coverage.*

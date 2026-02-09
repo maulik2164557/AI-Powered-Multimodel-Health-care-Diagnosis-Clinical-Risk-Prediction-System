@@ -1,0 +1,29 @@
+# --- Core Web Framework (Django) ---
+django>=4.2.0
+django-rest-framework          # For building the RESTful APIs mentioned in SRS
+django-cors-headers            # To allow communication between FastAPI and Django
+psycopg2-binary                # PostgreSQL adapter (SRS alternative to MySQL)
+
+# --- AI Service Engine (FastAPI) ---
+fastapi>=0.100.0
+uvicorn[standard]              # High-performance ASGI server for FastAPI
+pydantic[email]                # Data validation for User Registration models
+python-multipart               # To handle Medical Report/X-ray file uploads
+
+# --- AI & Machine Learning (Multimodal Engine) ---
+torch                          # PyTorch for processing imaging (X-rays, MRI, CT)
+torchvision                    # Specifically for medical image analysis
+transformers                   # For the AI Chatbot logic and text symptoms
+opencv-python-headless         # Image preprocessing for multimodal data
+numpy                          # Essential for handling medical test results
+pandas                         # For managing tabular medical history data
+
+# --- Security & Authentication ---
+python-jose[cryptography]      # For secure JWT token authentication
+passlib[bcrypt]                # Password hashing for Patient/Doctor security
+python-dotenv                  # Managing secure clinical environment variables
+
+# --- Utilities & Notifications ---
+aiohttp                        # Async requests for the Al API gateway
+requests                       # Standard API communications
+pillow                         # Handling patient profile pictures and images
