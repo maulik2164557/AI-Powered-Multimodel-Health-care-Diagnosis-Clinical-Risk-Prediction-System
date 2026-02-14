@@ -8,10 +8,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include('accounts.urls')),
-    path('medical/', include('medical.urls')),
-    path('appointments/', include('appointments.urls')),
-    path('ai/', include('ai_engine.urls')),
-    path('panel/', include('admin_panel.urls')),
+    # path('medical_history/', include('medical_history.urls')),
+    # path('appointments/', include('appointments.urls')),
+    # path('ai/', include('ai_engine.urls')),
+    # path('panel/', include('admin_panel.urls')),
 ]
 
 

@@ -28,11 +28,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party
-    'rest_framework',
+    # 'rest_framework',
 
     # Custom Apps
     'accounts',
-    'medical',
+    'medical_history',
     'appointments',
     'ai_engine',
     'admin_panel',
@@ -75,12 +75,8 @@ WSGI_APPLICATION = 'healthcare_project.wsgi.application'
 # Complete this later
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'healthcare_ai_db',
-        'USER': 'root',
-        'PASSWORD': 'your_mysql_password',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
