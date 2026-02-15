@@ -5,8 +5,25 @@
 
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create Account</button>
+
+    {{ form.username.label_tag }} {{ form.username }}<br>
+    {{ form.email.label_tag }} {{ form.email }}<br>
+    {{ form.full_name.label_tag }} {{ form.full_name }}<br>
+    {{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}<br>
+    {{ form.gender.label_tag }} {{ form.gender }}<br>
+    {{ form.phone_number.label_tag }} {{ form.phone_number }}<br>
+    {{ form.address.label_tag }} {{ form.address }}<br>
+    {{ form.role.label_tag }} {{ form.role }}<br>
+
+    <div id="doctor-fields" style="display:none;">
+        {{ form.specialization.label_tag }} {{ form.specialization }}<br>
+        {{ form.license_number.label_tag }} {{ form.license_number }}<br>
+    </div>
+
+    {{ form.password1.label_tag }} {{ form.password1 }}<br>
+    {{ form.password2.label_tag }} {{ form.password2 }}<br>
+
+    <button type="submit">Register</button>
 </form>
 
 {% for message in messages %}
@@ -19,4 +36,25 @@
     </div>
 {% endif %}
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleField = document.getElementById("id_role");
+        const doctorFields = document.getElementById("doctor-fields");
+
+        function toggleDoctorFields() {
+            console.log("Doctor selected");
+            if (roleField.value === "DOCTOR") {
+                doctorFields.style.display = "block";
+            } else {
+                doctorFields.style.display = "none";
+            }
+        }
+
+        roleField.addEventListener("change", toggleDoctorFields);
+        toggleDoctorFields(); 
+    });
+</script>
+
 {% endblock %}
+
+

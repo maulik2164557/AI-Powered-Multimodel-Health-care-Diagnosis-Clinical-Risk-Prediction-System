@@ -33,21 +33,37 @@ class RegistrationForm(UserCreationForm):
             'password2',
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['role'].choices = [
+            ('PATIENT', 'Patient'),
+            ('DOCTOR', 'Doctor'),
+        ]
+
+        # Doctor fields not required by default
+        self.fields['specialization'].required = False
+        self.fields['license_number'].required = False
+
     def clean(self):
         cleaned_data = super().clean()
         role = cleaned_data.get("role")
         specialization = cleaned_data.get("specialization")
         license_number = cleaned_data.get("license_number")
 
-        # Doctor validation
+        # If Doctor → require fields
         if role == "DOCTOR":
             if not specialization:
                 self.add_error('specialization', "Specialization is required for doctors.")
             if not license_number:
                 self.add_error('license_number', "License number is required for doctors.")
 
-        return cleaned_data
+        # If NOT Doctor → remove values (extra safety)
+        if role != "DOCTOR":
+            cleaned_data['specialization'] = ""
+            cleaned_data['license_number'] = ""
 
+        return cleaned_data
 
 class LoginForm(AuthenticationForm):
 

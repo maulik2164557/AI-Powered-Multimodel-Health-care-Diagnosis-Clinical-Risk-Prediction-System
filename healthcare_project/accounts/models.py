@@ -54,5 +54,12 @@ class User(AbstractUser):
     specialization = models.CharField(max_length=100, blank=True)
     license_number = models.CharField(max_length=50, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.role = "ADMIN"
+            self.is_approved = True
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
         return f"{self.username} ({self.role})"
