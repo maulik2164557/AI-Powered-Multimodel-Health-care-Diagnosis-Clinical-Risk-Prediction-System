@@ -1,0 +1,53 @@
+{% extends "base/base_doctor.html" %}
+
+{% block content %}
+
+<div style="max-width: 1000px; margin: 40px auto;">
+
+    <h2>My Scheduled Appointments</h2>
+
+    <hr>
+
+    <table style="width:100%; border-collapse: collapse;">
+        <tr style="background:#f2f2f2;">
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for appointment in appointments %}
+        <tr style="text-align:center; border-bottom:1px solid #ddd;">
+            <td>{{ appointment.patient.full_name }}</td>
+            <td>{{ appointment.date }}</td>
+            <td>{{ appointment.time }}</td>
+            <td>{{ appointment.message }}</td>
+            <td>{{ appointment.get_status_display }}</td>
+            <td>
+
+                {% if appointment.status == "APPROVED" %}
+                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'COMPLETED' %}">
+                        <button style="background:green; color:white;">Complete</button>
+                    </a>
+
+                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'CANCELLED' %}">
+                        <button style="background:red; color:white;">Cancel</button>
+                    </a>
+                {% else %}
+                    -
+                {% endif %}
+
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="padding:20px;">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

@@ -10,7 +10,7 @@
 
     <nav>
         <a href="{% url 'accounts:doctor_dashboard' %}">Dashboard</a> |
-        <a href="#">Patient Cases</a> |
+        <a href="{% url 'appointments:doctor_appointments' %}">Appointments</a>
         <a href="#">AI Reports</a> |
         <a href="{% url 'accounts:logout' %}">Logout</a>
     </nav>
