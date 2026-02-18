@@ -1,22 +1,22 @@
 import os
 from dotenv import load_dotenv
 
-# Load variables from the .env file into the environment
+# Load environment variables (useful for SECRET_KEY)
 load_dotenv()
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    """Base configuration class for the Healthcare System."""
+    """Configuration for SQLite3 and Healthcare App."""
     
-    # Security: Used for session signing and CSRF protection
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-key-placeholder-123'
+    # Security key for sessions
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hc-dev-secret-key-999'
     
-    # Database: SQLAlchemy connection URI for PostgreSQL
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    # DATABASE: Points to app.db in your project root folder
+    # SQLite format: sqlite:/// (three slashes for relative path)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-    # File Management: SRS requirement for medical image storage
-    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(_file_)), 'app/static/uploads')
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # Limit uploads to 16MB for security
-    
-    # AI Models: Path to pre-trained weights
-    MODEL_PATH = os.path.join(os.path.abspath(os.path.dirname(_file_)), 'models_weights')
+    # Folders for medical images
+    UPLOAD_FOLDER = os.path.join(basedir, 'app/static/uploads')
+    MODEL_PATH = os.path.join(basedir, 'models_weights')
