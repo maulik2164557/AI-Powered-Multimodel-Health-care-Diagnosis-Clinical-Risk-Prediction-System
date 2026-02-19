@@ -19,13 +19,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Required for your SRS and AI logic
-    'rest_framework',        # Django REST Framework
-    'corsheaders',           # To connect with FastAPI
+    # 'rest_framework',        # Django REST Framework
+    # 'corsheaders',           # To connect with FastAPI
     'core',                  # Your main logic app
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Must be at the top
+    # 'corsheaders.middleware.CorsMiddleware', # Must be at the top
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

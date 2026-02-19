@@ -4,6 +4,15 @@ from django.contrib.auth import login
 from django.contrib import messages
 from .models import PatientProfile, DiagnosisRecord
 
+
+def home(request):
+    """Entry point for the website"""
+    return render(request, 'core/home.html')
+
+def login_view(request):
+    """Authentication view for R.2.1"""
+    return render(request, 'core/login.html')
+
 def dashboard(request):
     """
     Main dashboard view. Shows recent diagnoses if the user is a patient.
