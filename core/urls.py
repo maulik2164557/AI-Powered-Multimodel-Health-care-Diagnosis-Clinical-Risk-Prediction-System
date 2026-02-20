@@ -14,4 +14,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'), 
     path('register/', views.register_patient, name='register'),
     path('dashboard/', views.dashboard, name='dashboard'), 
+    path('api/chatbot/', views.chatbot_api, name='chatbot_api'), # Step 5: Chatbot API Endpoint
 ]

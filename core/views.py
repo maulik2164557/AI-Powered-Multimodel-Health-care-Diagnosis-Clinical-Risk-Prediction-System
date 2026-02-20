@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
 from .models import PatientProfile, DiagnosisRecord
+from django.http import JsonResponse
+from ai_engine.main import ai_bridge
+import json
 
 
 def home(request):
@@ -33,3 +36,22 @@ def register_patient(request):
     We will expand this when we build the HTML forms.
     """
     return render(request, 'core/register.html')
+
+
+def chatbot_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user_message = data.get("message", "")
+            
+            # Call the Gemini Engine
+            ai_summary = ai_bridge.get_diagnosis_summary(user_message)
+            
+            return JsonResponse({
+                "status": "success",
+                "ai_response": ai_summary
+            })
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+    return JsonResponse({"error": "POST request required"}, status=400)
