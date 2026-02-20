@@ -10,8 +10,8 @@ app_name = 'core' # Used for namespacing URLs
 
 
 urlpatterns = [
-    path('', views.home, name='home'),             # Step 1: Landing Page
-    path('login/', views.login_view, name='login'), # Step 2: Login Page
-    path('register/', views.register_patient, name='register'), # Step 3: Register
-    path('dashboard/', views.dashboard, name='dashboard'), # Step 4: Patient Dashboard
+    path('', views.home, name='home'),             
+    path('login/', views.login_view, name='login'), 
+    path('register/', views.register_patient, name='register'),
+    path('dashboard/', views.dashboard, name='dashboard'), 
 ]

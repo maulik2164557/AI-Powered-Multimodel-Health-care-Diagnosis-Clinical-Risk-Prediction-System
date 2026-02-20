@@ -152,10 +152,16 @@
             <li><a href="#">Specialists</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
-        <div class="nav-btns">
+        <!-- <div class="nav-btns">
             <a href="login.html" class="btn-login">Login</a>
             <a href="registration.html" class="btn-register">Register</a>
-        </div>
+        </div> -->/
+
+        <div class="nav-btns">
+    <a href="{% url 'core:login' %}" class="btn-login">Login</a>
+    <a href="{% url 'core:register' %}" class="btn-register">Register</a>
+</div>
+       
     </nav>
 
     <section class="hero">
@@ -164,9 +170,9 @@
             <h1>Your Intelligent Health Partner.</h1>
             <p>Experience high-accuracy illness prediction and seamless doctor appointments with our advanced clinical risk platform.</p>
             <div class="hero-btns">
-                <a href="registration.html" class="btn-main btn-primary">Book an Appointment</a>
-                <a href="#features" class="btn-main btn-secondary">Learn More</a>
-            </div>
+    <a href="{% url 'core:register' %}" class="btn-main btn-primary">Book an Appointment</a>
+    <a href="#features" class="btn-main btn-secondary">Learn More</a>
+</div>
         </div>
     </section>
 
