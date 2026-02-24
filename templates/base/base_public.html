@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Healthcare System</title>
+</head>
+<body>
+
+    <h1>AI-Powered Multimodel Healthcare Diagnosis System</h1>
+
+    <nav>
+        <a href="{% url 'accounts:home' %}">Home</a> |
+        <a href="{% url 'accounts:register' %}">Register</a> |
+        <a href="{% url 'accounts:login' %}">Login</a>
+    </nav>
+
+    <hr>
+
+    {% block content %}{% endblock %}
+
+</body>
+</html>

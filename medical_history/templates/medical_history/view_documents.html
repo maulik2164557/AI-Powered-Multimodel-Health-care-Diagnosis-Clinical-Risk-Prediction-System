@@ -1,0 +1,16 @@
+{% extends 'base/base_patient.html' %}
+{% block content %}
+<h2>Your Medical Documents</h2>
+
+{% for doc in documents %}
+    <div>
+        <h4>{{ doc.title }}</h4>
+        <a href="{{ doc.file.url }}" target="_blank">View File</a>
+        <small>{{ doc.uploaded_at }}</small>
+    </div>
+    <hr>
+{% empty %}
+    <p>No documents uploaded yet.</p>
+{% endfor %}
+
+{% endblock %}

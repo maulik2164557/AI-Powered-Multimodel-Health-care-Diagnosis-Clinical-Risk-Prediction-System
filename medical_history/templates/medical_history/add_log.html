@@ -1,0 +1,11 @@
+{% extends 'base/base_patient.html' %}
+{% block content %}
+<h2>Add Medical Log</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Log</button>
+</form>
+
+{% endblock %}

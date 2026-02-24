@@ -1,0 +1,16 @@
+{% extends 'base/base_patient.html' %}
+{% block content %}
+<h2>Your Medical Logs</h2>
+
+{% for log in logs %}
+    <div>
+        <h4>{{ log.title }}</h4>
+        <p>{{ log.description }}</p>
+        <small>{{ log.created_at }}</small>
+    </div>
+    <hr>
+{% empty %}
+    <p>No logs added yet.</p>
+{% endfor %}
+
+{% endblock %}
