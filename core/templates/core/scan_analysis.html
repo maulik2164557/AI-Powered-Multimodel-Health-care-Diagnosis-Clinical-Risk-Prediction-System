@@ -1,0 +1,77 @@
+
+<div class="chat-page-container">
+    <div id="particles-chat"></div>
+    <div class="glass-chat-card animate__animated animate__fadeIn" style="flex-direction: column; padding: 40px;">
+        <h2 class="text-white fw-bold mb-4"><i class="fas fa-microscope text-cyan me-3"></i>AI Radiology Lab</h2>
+        
+        <form id="scan-form" enctype="multipart/form-data" class="text-center">
+            {% csrf_token %}
+            <div id="drop-zone" style="border: 2px dashed var(--ai-cyan); border-radius: 20px; padding: 60px; cursor: pointer; background: rgba(0, 242, 254, 0.05);">
+                <i class="fas fa-cloud-upload-alt fa-4x text-cyan mb-3"></i>
+                <h4 class="text-white">Drag & Drop X-Ray/MRI here</h4>
+                <p class="text-muted">or click to browse files</p>
+                <input type="file" id="scan-input" name="image" hidden accept="image/*">
+            </div>
+            
+            <div id="preview-container" class="mt-4 d-none">
+                <img id="image-preview" src="#" alt="Preview" style="max-width: 300px; border-radius: 15px; border: 2px solid var(--ai-cyan);">
+            </div>
+
+            <button type="submit" class="btn btn-ai btn-lg rounded-pill px-5 mt-4">
+                <i class="fas fa-brain me-2"></i> Start Neural Analysis
+            </button>
+        </form>
+
+        <div id="analysis-result" class="mt-5 text-white d-none p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;">
+            <h5 class="text-cyan"><i class="fas fa-clipboard-check me-2"></i> Analysis Report:</h5>
+            <div id="analysis-text" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JS to handle click-to-upload and preview
+    const dropZone = document.getElementById('drop-zone');
+    const scanInput = document.getElementById('scan-input');
+    const preview = document.getElementById('image-preview');
+    const previewContainer = document.getElementById('preview-container');
+
+    dropZone.onclick = () => scanInput.click();
+
+    scanInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                preview.src = f.target.result;
+                previewContainer.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    document.getElementById('scan-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const resultDiv = document.getElementById('analysis-result');
+    const textDiv = document.getElementById('analysis-text');
+
+    // Show loading state
+    textDiv.innerHTML = '<div class="spinner-border text-cyan"></div> Processing Scan...';
+    resultDiv.classList.remove('d-none');
+
+    const res = await fetch("{% url 'core:scan_analysis_api' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {'X-CSRFToken': '{{ csrf_token }}'}
+    });
+
+    const data = await res.json();
+    if(data.analysis) {
+        // Use marked.js if you have it loaded to format the AI report
+        textDiv.innerHTML = data.analysis; 
+    } else {
+        textDiv.innerHTML = "Error: " + data.error;
+    }
+};
+</script>
