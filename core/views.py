@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from .models import ChatConversation, ChatMessage
+from .models import ChatConversation, ChatMessage, MedicalScan
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -12,6 +12,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 import PIL.Image  
 from django.core.files.storage import default_storage
+from django.db.models import Count
+from django.shortcuts import render
 
 
 # Configure Gemini API
@@ -164,3 +166,63 @@ def scan_analysis_api(request):
 @login_required
 def scan_analysis_page(request):
     return render(request, 'core/scan_analysis.html')
+
+
+@login_required
+def patient_dashboard(request):
+    """
+    Main Backend hub for the User Profile and Medical History.
+    """
+    user = request.user
+    
+    # 1. Fetch Conversations with message counts
+    # We use prefetch_related to optimize the database hits
+    conversations = ChatConversation.objects.filter(user=user).annotate(
+        num_messages=Count('messages')
+    ).order_by('-updated_at')
+
+    # 2. Fetch Medical Scans
+    scans = MedicalScan.objects.filter(user=user).order_by('-uploaded_at')
+
+    # 3. Aggregate Clinical Stats
+    # These will be used for the 'Quick Stats' cards in your UI
+    context = {
+        'user_profile': user, # Accessing full_name, role, gender etc.
+        'conversations': conversations,
+        'scans': scans,
+        'stats': {
+            'total_chats': conversations.count(),
+            'total_scans': scans.count(),
+            'last_scan': scans.first().uploaded_at if scans.exists() else None,
+        }
+    }
+    
+    return render(request, 'core/dashboard.html', context)
+
+@login_required
+def view_scan_detail(request, scan_id):
+    """
+    Retrieves the specific analysis for a stored X-Ray/MRI.
+    """
+    try:
+        scan = MedicalScan.objects.get(id=scan_id, user=request.user)
+        return JsonResponse({
+            "scan_type": scan.get_scan_type_display(),
+            "analysis": scan.ai_analysis,
+            "date": scan.uploaded_at.strftime("%Y-%m-%d"),
+            "image_url": scan.image.url
+        })
+    except MedicalScan.DoesNotExist:
+        return JsonResponse({"error": "Scan not found"}, status=404)
+    
+
+def home_dashboard(request):
+    # This matches the path inside your templates folder
+    return render(request, 'core/home.html')
+
+
+# def login_view(request):
+    # return render(request, 'core/login.html')
+
+def register_view(request):
+    return render(request, 'core/register.html')
