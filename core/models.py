@@ -52,3 +52,16 @@ class MedicalScan(models.Model):
 
     def __str__(self):
         return f"{self.scan_type.upper()} - {self.user.username} ({self.uploaded_at.date()})"
+
+class HealthMetric(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    blood_pressure_sys = models.IntegerField(help_text="Systolic")
+    blood_pressure_dia = models.IntegerField(help_text="Diastolic")
+    heart_rate = models.IntegerField()
+    glucose_level = models.FloatField()
+    bmi = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    risk_score = models.CharField(max_length=50, blank=True) # AI Generated result
+
+    def __str__(self):
+        return f"Metrics for {self.user.username} - {self.timestamp.date()}"
