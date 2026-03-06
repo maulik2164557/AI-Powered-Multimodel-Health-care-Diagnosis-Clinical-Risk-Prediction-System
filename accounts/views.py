@@ -1,10 +1,17 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from ai_engine.utils import GeminiEngine
 from .models import User
 from .forms import RegistrationForm, LoginForm
+from medical_history.models import ChatConversation, ChatMessage, MedicalScan, HealthMetric
+from django.http import HttpResponse
+from medical_history.models import MedicalScan, HealthMetric, ChatConversation
 
+
+user = get_user_model()
 
 # =====================================
 # PUBLIC HOMEPAGE
@@ -93,22 +100,50 @@ def dashboard_redirect(request):
 # =====================================
 # DASHBOARDS
 # =====================================
-@login_required
-def patient_dashboard(request):
-    if request.user.role != 'PATIENT':
-        return redirect('accounts:home')
-    return render(request, 'accounts/dashboard_patient.html')
-
-
-@login_required
-def doctor_dashboard(request):
-    if request.user.role != 'DOCTOR':
-        return redirect('accounts:home')
-    return render(request, 'accounts/dashboard_doctor.html')
-
 
 @login_required
 def admin_dashboard(request):
     if request.user.role != 'ADMIN':
         return redirect('accounts:home')
     return render(request, 'accounts/dashboard_admin.html')
+
+
+@login_required
+def patient_dashboard(request):
+
+    if request.user.role != 'PATIENT':
+        return redirect('accounts:home')
+    # Connect medical_history & media
+
+    # user_obj = request.user.id
+    scans = MedicalScan.objects.filter(user=request.user).order_by('-uploaded_at')
+    chats = ChatConversation.objects.filter(user=request.user).order_by('-updated_at')
+    
+    context = {
+        'recent_scans': scans,
+        'chat_history': chats,
+    }
+    return render(request, 'accounts/dashboard_patient.html', context)
+
+
+@login_required
+def doctor_dashboard(request):
+    if request.user.role != 'DOCTOR':
+        return HttpResponse("Unauthorized", status=403)
+
+    # Fetch all patients and their recent data
+    patients = User.objects.filter(role='PATIENT')
+    
+    # Example: Generating a quick summary for the first patient
+    if patients.exists():
+        first_patient = patients.first()
+        # Connect AI to medical_history
+        history = " ".join([m.content for m in first_patient.conversations.first().messages.all()[:5]])
+        ai_summary = GeminiEngine.get_response(f"Summarize this patient's history: {history}")
+    else:
+        ai_summary = "No patient data available."
+
+    return render(request, 'accounts/dashboard_doctor.html', {
+        'patients': patients,
+        'ai_summary': ai_summary
+    })

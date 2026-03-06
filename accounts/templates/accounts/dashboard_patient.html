@@ -8,6 +8,9 @@
     <li>View diagnosis history</li>
     <li>Upload medical reports</li>
     <li>Check risk prediction</li>
+    <a href="{% url 'ai_engine:get_health_advice' %}" class="btn btn-primary">
+        <i class="fas fa-magic"></i> Generate AI Health Plan
+    </a>
 </ul>
 
 {% endblock %}

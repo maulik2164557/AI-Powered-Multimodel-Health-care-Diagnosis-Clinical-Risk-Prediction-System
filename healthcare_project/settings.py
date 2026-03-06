@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'accounts',
     'medical_history',
     'appointments',
-    'core',
     'ai_engine',
     'admin_panel',
 ]
