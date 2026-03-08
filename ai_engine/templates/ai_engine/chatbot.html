@@ -241,11 +241,63 @@
             chatWindow.innerHTML += `<div class="msg msg-ai" id="${tempId}"><i class="fas fa-spinner fa-spin"></i> Analyzing multimodal data...</div>`;
 
             // 3. API Call
-            const response = await fetch("{% url 'ai_engine:save_scan_analysis' %}", {
+            const response = await fetch("{% url 'ai_engine:medical_chatbot' %}", {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {'X-CSRFToken': '{{ csrf_token }}'}
             });
+            
             const data = await response.json();
+
+            if(data.status === 'success') {
+                const aiDiv = document.getElementById(tempId);
+                aiDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <strong>Compulsory:</strong> You must download the PDF below to save this diagnosis to your Medical History.
+                    </div>
+                <p>${data.response.replace(/\n/g, '<br>')}</p>
+                <a href="{% url 'ai_engine:download_prescription' %}?text=${encodeURIComponent(data.response)}" 
+                class="btn btn-primary">
+                <i class="fas fa-download"></i> Download & Save Prescription
+                </a>
+                `;
+            }   
+            // const response = await fetch("{% url 'ai_engine:medical_chatbot' %}", {
+            // method: 'POST',
+            // body: formData
+            // });
+            // const data = await response.json();
+
+            // // Replace the block inside your chatForm.onsubmit (Part 4: Update AI response)
+            // if(data.status === 'success') {
+            // const aiDiv = document.getElementById(tempId);
+    
+            // // Structure the response with a compulsory download button
+            // aiDiv.innerHTML = `
+            //     <div class="alert alert-warning border-warning shadow-sm animate__animated animate__pulse">
+            //         <i class="fas fa-exclamation-circle me-2"></i>
+            //     <strong>Action Required:</strong> You must download the generated prescription to save this session to your Medical History.
+            // </div>
+        
+            // <div class="p-3 bg-light rounded border mb-3">
+            //     <h6 class="text-primary fw-bold"><i class="fas fa-stethoscope me-2"></i>AI Clinical Assessment:</h6>
+            //     <div id="text-${tempId}">${data.response.replace(/\n/g, '<br>')}</div>
+            // </div>
+
+            // <a href="{% url 'ai_engine:download_prescription' %}?text=${encodeURIComponent(data.response)}" 
+            //     class="btn btn-ai w-100 py-2 fw-bold" 
+            //     onclick="markAsDownloaded('${tempId}')">
+            //     <i class="fas fa-file-download me-2"></i> Download Prescription & Save to History
+            // </a>
+            // `;  
+            // }
+
+            function markAsDownloaded(id) {
+            // Optional: Visual confirmation that it was saved
+            const div = document.getElementById(id);
+            div.querySelector('.alert').className = "alert alert-success border-success mt-2";
+            div.querySelector('.alert').innerHTML = '<i class="fas fa-check-circle me-2"></i> Prescription Downloaded and Saved to History successfully!';
+        }
 
             // 4. Update AI response
             const aiDiv = document.getElementById(tempId);
