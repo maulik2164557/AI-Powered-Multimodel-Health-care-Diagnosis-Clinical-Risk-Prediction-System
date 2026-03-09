@@ -12,6 +12,7 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from django.core.files.base import ContentFile
+import google.genai as genai
 
 
 logger = logging.getLogger(__name__)

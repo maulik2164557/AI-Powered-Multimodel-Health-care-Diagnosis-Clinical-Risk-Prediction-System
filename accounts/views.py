@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from ai_engine.utils import GeminiEngine
 from .models import User
 from .forms import RegistrationForm, LoginForm
 from medical_history.models import ChatConversation, ChatMessage, MedicalScan, HealthMetric
@@ -133,17 +132,8 @@ def doctor_dashboard(request):
 
     # Fetch all patients and their recent data
     patients = User.objects.filter(role='PATIENT')
-    
-    # Example: Generating a quick summary for the first patient
-    if patients.exists():
-        first_patient = patients.first()
-        # Connect AI to medical_history
-        history = " ".join([m.content for m in first_patient.conversations.first().messages.all()[:5]])
-        ai_summary = GeminiEngine.get_response(f"Summarize this patient's history: {history}")
-    else:
-        ai_summary = "No patient data available."
 
     return render(request, 'accounts/dashboard_doctor.html', {
         'patients': patients,
-        'ai_summary': ai_summary
+        'ai_summary': "AI features have been removed from this project."
     })

@@ -10,6 +10,12 @@
         Book Appointment
     </h2>
 
+    {% if form.non_field_errors %}
+        <div style="background:#ffe6e6; border:1px solid #ffb3b3; padding:10px; border-radius:6px; margin-bottom:15px;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
 
@@ -26,6 +32,9 @@
         <div style="margin-bottom:15px;">
             <label>Select Time</label>
             {{ form.time }}
+            <small style="display:block; color:#666; margin-top:4px;">
+                Slots are in 15-minute intervals (e.g., 10:00, 10:15, 10:30, 10:45).
+            </small>
         </div>
 
         <div style="margin-bottom:15px;">

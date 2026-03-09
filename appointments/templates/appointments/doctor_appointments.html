@@ -27,12 +27,12 @@
             <td>{{ appointment.get_status_display }}</td>
             <td>
 
-                {% if appointment.status == "APPROVED" %}
-                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'COMPLETED' %}">
+                {% if appointment.status == "approved" %}
+                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'completed' %}">
                         <button style="background:green; color:white;">Complete</button>
                     </a>
 
-                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'CANCELLED' %}">
+                    <a href="{% url 'appointments:update_appointment_status' appointment.id 'cancelled' %}">
                         <button style="background:red; color:white;">Cancel</button>
                     </a>
                 {% else %}

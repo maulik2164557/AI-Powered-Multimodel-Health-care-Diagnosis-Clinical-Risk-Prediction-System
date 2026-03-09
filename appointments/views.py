@@ -19,14 +19,18 @@ def appointments_home(request):
 
 @login_required
 def book_appointment(request):
+    if request.user.role != "PATIENT":
+        return redirect('accounts:dashboard_redirect')
 
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.patient = request.user
-            appointment.status = 'pending'
+            # System-managed approval: if it passes validation, it is automatically approved.
+            appointment.status = 'approved'
             appointment.save()
+            messages.success(request, "Appointment booked successfully. Your slot is confirmed.")
             return redirect('appointments:appointments_home')
     else:
         form = AppointmentForm()
@@ -62,7 +66,7 @@ def update_appointment_status(request, pk, new_status):
         return redirect('accounts:dashboard_redirect')
 
     # Only allow change if already approved
-    if appointment.status != "APPROVED":
+    if appointment.status != "approved":
         messages.error(request, "Only approved appointments can be updated.")
         return redirect('appointments:doctor_appointments')
 
@@ -81,7 +85,9 @@ def update_appointment_status(request, pk, new_status):
         messages.error(request, "You can only update after appointment time.")
         return redirect('appointments:doctor_appointments')
 
-    if new_status in ["COMPLETED", "CANCELLED"]:
+    # Normalize input
+    new_status = (new_status or "").lower()
+    if new_status in ["completed", "cancelled"]:
         appointment.status = new_status
         appointment.save()
 

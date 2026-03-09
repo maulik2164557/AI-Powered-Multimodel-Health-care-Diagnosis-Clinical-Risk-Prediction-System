@@ -13,7 +13,7 @@ class GeminiEngine:
     """
     
     @staticmethod
-    def get_model(model_name='gemini-1.5-flash'):
+    def get_model(model_name='gemini-3-flash-preview'):
         """
         Returns a configured Gemini model instance (for older-style usage).
         """
@@ -33,7 +33,7 @@ class GeminiEngine:
         """
         client = cls.get_client()
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-3-flash-preview',
             contents=user_message
         )
         return response.text
@@ -80,12 +80,14 @@ class GeminiEngine:
         response = model.generate_content(prompt)
         return response.text
     
+
     @staticmethod
     def get_response(prompt):
         """
         Primary helper for generating a clinical response.
-        Uses the newer Client API and wraps common quota/rate-limit
-        errors with a user-friendly message.
+        Uses the newer Client API. Any API problems (invalid key,
+        quota, etc.) are propagated as clear technical errors so the
+        UI can show them, without inserting generic medical advice.
         """
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
@@ -96,35 +98,9 @@ class GeminiEngine:
             )
             return response.text
         except Exception as e:
-            error_text = str(e)
-            # Clear explanation for expired/invalid API key
-            if "API key expired" in error_text or "API_KEY_INVALID" in error_text:
-                raise Exception(
-                    "The configured Gemini API key is invalid or expired. "
-                    "Please update the API key in the server settings."
-                )
-            # If the hosted Gemini API is out of quota, fall back to a
-            # safe, generic clinical message instead of failing the chat.
-            if "RESOURCE_EXHAUSTED" in error_text or "429" in error_text:
-                fallback = (
-                    "Our main AI service is temporarily unavailable because its "
-                    "usage limit has been reached (error 429: RESOURCE_EXHAUSTED).\n\n"
-                    "However, based on your description, here is general guidance:\n"
-                    "1. Monitor your symptoms closely, especially fever, severe pain, "
-                    "   breathing difficulty, chest pain, confusion, or loss of consciousness.\n"
-                    "2. If any emergency symptom is present, go to the nearest hospital or "
-                    "   call emergency services immediately.\n"
-                    "3. For non‑emergency but worrying symptoms, book an appointment with an "
-                    "   appropriate specialist doctor as soon as possible.\n"
-                    "4. Stay hydrated, avoid self‑medicating with strong drugs without a "
-                    "   doctor’s supervision, and keep a record of your temperature, pain level, "
-                    "   and any medicines you take.\n\n"
-                    "Disclaimer: This is a generic, non‑personalized message shown because the "
-                    "AI model could not be contacted. It is NOT a medical diagnosis. "
-                    "Always consult a qualified doctor for final advice."
-                )
-                return fallback
-            # For any other error, surface the original message to the caller.
+            # Just propagate a clean error message upwards; no generic
+            # clinical content is generated here. The frontend will show
+            # the actual API error (e.g. quota exceeded, key invalid).
             raise
 
     # def get_response(prompt, image=None, history=None):
@@ -158,7 +134,7 @@ class GeminiEngine:
             "3. Recommended exercises. "
             "Include a disclaimer that this is AI-generated advice."
         )
-        response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+        response = client.models.generate_content(model='gemini-3-flash-preview', contents=prompt)
         return response.text
     
     @staticmethod

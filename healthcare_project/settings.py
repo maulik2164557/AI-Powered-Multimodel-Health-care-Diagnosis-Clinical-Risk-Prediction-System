@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'accounts',
     'medical_history',
     'appointments',
-    'ai_engine',
     'admin_panel',
 ]
 
@@ -142,6 +141,4 @@ LOGOUT_REDIRECT_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Gemini API Key
-# GEMINI_API_KEY="AIzaSyDmh53dEHEkfdQntS7cZWSNTH263mtQY1s"
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyDmh53dEHEkfdQntS7cZWSNTH263mtQY1s")
+# AI chatbot removed from project.

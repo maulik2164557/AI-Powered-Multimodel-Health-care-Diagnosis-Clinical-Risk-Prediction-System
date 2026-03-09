@@ -13,7 +13,7 @@ class StandardMedicalAI:
         
         # Initialize the model
         # We use gemini-1.5-flash for fast, clinical responses
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel('gemini-3-flash-preview')
 
     def get_diagnosis_summary(self, user_input):
         """
