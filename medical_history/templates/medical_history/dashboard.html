@@ -33,7 +33,7 @@
   <div style="margin-top: 8px">
     <small> 📅 Uploaded: {{ record.created_at|date:"d M Y, h:i A" }} </small>
     <br />
-    <small> ✏ Last Updated: {{ record.updated_at|date:"d M Y, h:i A" }} </small>
+    <small> ✏ Last Updated: {{ record.uploaded_at|default:record.created_at|date:"d M Y, h:i A" }} </small>
   </div>
 
   <div style="margin-top: 10px">

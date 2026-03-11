@@ -1,16 +1,26 @@
 {% extends 'base/base_public.html' %}
 
 {% block content %}
-<h2>Login</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="p-4 bg-white rounded-4 border shadow-sm">
+            <div class="text-center mb-3">
+                <i class="fas fa-lock fa-2x text-primary mb-2"></i>
+                <h2 class="fw-bold mb-0">Login</h2>
+                <p class="text-muted mb-0">Access your dashboard securely.</p>
+            </div>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-ai w-100 rounded-pill py-2" type="submit">Login</button>
+            </form>
 
-{% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
-{% endfor %}
+            <div class="text-center mt-3">
+                <small class="text-muted">New here? <a href="{% url 'accounts:register' %}">Create an account</a></small>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

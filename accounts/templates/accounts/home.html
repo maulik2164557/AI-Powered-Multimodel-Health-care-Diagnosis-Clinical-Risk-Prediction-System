@@ -1,15 +1,43 @@
 {% extends 'base/base_public.html' %}
 
 {% block content %}
-<h2>Welcome to the AI Healthcare Platform</h2>
+<div class="text-center">
+    <h2 class="fw-bold mb-3">Welcome to Smart Healthcare Platform</h2>
+    <p class="text-muted mb-4">A secure portal for patients, doctors, appointments, and medical history.</p>
+</div>
 
-<p>
-This system provides AI-powered diagnosis and clinical risk prediction.
-</p>
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="p-4 bg-white rounded-4 border h-100">
+            <div class="mb-2 text-primary"><i class="fas fa-calendar-check fa-2x"></i></div>
+            <h5 class="fw-bold">Appointments</h5>
+            <p class="text-muted mb-0">Book and manage doctor appointments with 15-minute slot scheduling.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4 bg-white rounded-4 border h-100">
+            <div class="mb-2 text-primary"><i class="fas fa-file-medical fa-2x"></i></div>
+            <h5 class="fw-bold">Medical History</h5>
+            <p class="text-muted mb-0">Maintain logs and documents securely in one place.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4 bg-white rounded-4 border h-100">
+            <div class="mb-2 text-primary"><i class="fas fa-user-shield fa-2x"></i></div>
+            <h5 class="fw-bold">Secure Access</h5>
+            <p class="text-muted mb-0">Role-based access for patients, doctors, and admins.</p>
+        </div>
+    </div>
+</div>
 
-<p>
-Please register or login to continue.
-</p>
+<div class="text-center mt-4">
+    <a class="btn btn-outline-primary rounded-pill px-4 me-2" href="{% url 'accounts:register' %}">
+        <i class="fas fa-user-plus me-1"></i>Register
+    </a>
+    <a class="btn btn-ai rounded-pill px-4" href="{% url 'accounts:login' %}">
+        Secure Login
+    </a>
+</div>
 
 {% endblock %}
 
