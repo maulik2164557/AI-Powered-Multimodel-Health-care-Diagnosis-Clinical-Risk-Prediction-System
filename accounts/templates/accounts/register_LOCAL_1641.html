@@ -1,9 +1,5 @@
-{% extends 'base/base_public.html' %} {% load static %} {% block title %}
-Register | AI Healthcare {% endblock %} {% block extra_css %}
-<link rel="stylesheet" href="{% static 'accounts/register.css' %}" />
-{% endblock %} {% block content %}
+{% extends 'base/base_public.html' %}
 
-<<<<<<< HEAD
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -52,124 +48,28 @@ Register | AI Healthcare {% endblock %} {% block extra_css %}
             </div>
         </div>
     </div>
-=======
-<div class="container register-container">
-  <div class="card shadow-lg register-card">
-    <div class="card-body">
-      <h2 class="text-center mb-4">
-        <i class="fas fa-user-plus me-2"></i>
-        User Registration
-      </h2>
-
-      <form method="POST">
-        {% csrf_token %}
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.username.label }}</label>
-            {{ form.username }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.email.label }}</label>
-            {{ form.email }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.full_name.label }}</label>
-            {{ form.full_name }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.date_of_birth.label }}</label>
-            {{ form.date_of_birth }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.gender.label }}</label>
-            {{ form.gender }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.phone_number.label }}</label>
-            {{ form.phone_number }}
-          </div>
-
-          <div class="col-md-12 mb-3">
-            <label class="form-label">{{ form.address.label }}</label>
-            {{ form.address }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.role.label }}</label>
-            {{ form.role }}
-          </div>
-        </div>
-
-        <div id="doctor-fields">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{{ form.specialization.label }}</label>
-              {{ form.specialization }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{{ form.license_number.label }}</label>
-              {{ form.license_number }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.password1.label }}</label>
-            {{ form.password1 }}
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label">{{ form.password2.label }}</label>
-            {{ form.password2 }}
-          </div>
-        </div>
-
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-ai btn-lg px-5 rounded-pill">
-            Register
-          </button>
-        </div>
-      </form>
-
-      {% for message in messages %}
-      <div class="alert alert-danger mt-3">{{ message }}</div>
-      {% endfor %} {% if form.errors %}
-      <div class="alert alert-danger mt-3">{{ form.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
->>>>>>> saumy
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const roleField = document.getElementById("id_role");
-    const doctorFields = document.getElementById("doctor-fields");
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleField = document.getElementById("id_role");
+        const doctorFields = document.getElementById("doctor-fields");
 
-    function toggleDoctorFields() {
-      if (roleField.value === "DOCTOR") {
-        doctorFields.style.display = "block";
-      } else {
-        doctorFields.style.display = "none";
-      }
-    }
+        function toggleDoctorFields() {
+            console.log("Doctor selected");
+            if (roleField.value === "DOCTOR") {
+                doctorFields.style.display = "block";
+            } else {
+                doctorFields.style.display = "none";
+            }
+        }
 
-    roleField.addEventListener("change", toggleDoctorFields);
-
-    toggleDoctorFields();
-  });
+        roleField.addEventListener("change", toggleDoctorFields);
+        toggleDoctorFields(); 
+    });
 </script>
 
 {% endblock %}
-<<<<<<< HEAD
 
 <!-- <!DOCTYPE html>
 <html lang="en">
@@ -374,5 +274,3 @@ Register | AI Healthcare {% endblock %} {% block extra_css %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html> -->
-=======
->>>>>>> saumy
