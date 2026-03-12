@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib import messages
 from .forms import AppointmentForm
 from .models import Appointment
+import datetime
 
 
 # Patient
@@ -19,21 +20,31 @@ def appointments_home(request):
 
 @login_required
 def book_appointment(request):
+
     if request.user.role != "PATIENT":
         return redirect('accounts:dashboard_redirect')
 
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
+        form = AppointmentForm(request.POST, user=request.user)
+
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.patient = request.user
-            # System-managed approval: if it passes validation, it is automatically approved.
+
+            # System-managed approval
             appointment.status = 'approved'
+
             appointment.save()
-            messages.success(request, "Appointment booked successfully. Your slot is confirmed.")
+
+            messages.success(
+                request,
+                "Appointment booked successfully. Your slot is confirmed."
+            )
+
             return redirect('appointments:appointments_home')
+
     else:
-        form = AppointmentForm()
+        form = AppointmentForm(user=request.user)
 
     return render(request, 'appointments/book_appointment.html', {
         'form': form
@@ -61,34 +72,48 @@ def update_appointment_status(request, pk, new_status):
 
     appointment = get_object_or_404(Appointment, pk=pk)
 
-    # Only doctor assigned can update
+    # Only the assigned doctor can update
     if request.user != appointment.doctor:
         return redirect('accounts:dashboard_redirect')
 
-    # Only allow change if already approved
+    # Only approved appointments can be changed
     if appointment.status != "approved":
         messages.error(request, "Only approved appointments can be updated.")
         return redirect('appointments:doctor_appointments')
 
-    # Check if appointment time has passed
-    appointment_datetime = timezone.datetime.combine(
-        appointment.date,
-        appointment.time
-    )
+    new_status = (new_status or "").lower()
 
-    appointment_datetime = timezone.make_aware(
-        appointment_datetime,
-        timezone.get_current_timezone()
-    )
+    # Allow cancellation anytime
+    if new_status == "cancelled":
+        appointment.status = "cancelled"
+        appointment.save()
 
-    if timezone.now() < appointment_datetime:
-        messages.error(request, "You can only update after appointment time.")
+        messages.success(request, "Appointment cancelled.")
         return redirect('appointments:doctor_appointments')
 
-    # Normalize input
-    new_status = (new_status or "").lower()
-    if new_status in ["completed", "cancelled"]:
-        appointment.status = new_status
+    # Completion only after appointment time
+    if new_status == "completed":
+
+        appointment_datetime = datetime.datetime.combine(
+            appointment.date,
+            appointment.time
+        )
+
+        appointment_datetime = timezone.make_aware(
+            appointment_datetime,
+            timezone.get_current_timezone()
+        )
+
+        if timezone.now() < appointment_datetime:
+            messages.error(
+                request,
+                "You can only mark the appointment completed after its scheduled time."
+            )
+            return redirect('appointments:doctor_appointments')
+
+        appointment.status = "completed"
         appointment.save()
+
+        messages.success(request, "Appointment marked as completed.")
 
     return redirect('appointments:doctor_appointments')
