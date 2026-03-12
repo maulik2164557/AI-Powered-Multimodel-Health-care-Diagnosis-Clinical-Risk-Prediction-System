@@ -1,14 +1,35 @@
-{% extends 'base/base_public.html' %}
+{% extends 'base/base_public.html' %} {% load static %} {% block title %} Home |
+AI Healthcare {% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/home.css' %}" />
+{% endblock %} {% block content %}
 
-{% block content %}
-<h2>Welcome to the AI Healthcare Platform</h2>
+<header class="hero-section">
+  <div class="hero-bg-image"></div>
 
-<p>
-This system provides AI-powered diagnosis and clinical risk prediction.
-</p>
+  <div class="hero-content container text-center">
+    <h1 class="hero-title">AI-Powered Healthcare System</h1>
 
-<p>
-Please register or login to continue.
-</p>
+    <p class="lead mb-4">Integrating Neural eNetworks with Clinical Expertis</p>
+
+    <a
+      href="{% url 'accounts:register' %}"
+      class="btn btn-ai btn-lg rounded-pill px-5"
+    >
+      Get Started
+    </a>
+  </div>
+</header>
+
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="mb-5">AI Healthcare Platform</h2>
+
+    <p>
+      This system provides AI-powered diagnosis and clinical risk prediction.
+    </p>
+
+    <p>Please register or login to continue.</p>
+  </div>
+</section>
 
 {% endblock %}
